@@ -12,6 +12,8 @@
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
-    "neo4j-driver": "^1.7.6"
+    "neo4j-driver": "^1.7.6",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.5"
   }
 }
