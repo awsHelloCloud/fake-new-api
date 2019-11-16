@@ -11,8 +11,7 @@ const {
   NEO4J_HOST,
 }=process.env
 
-console.log('FAKENEWS_DATA_SERVER_HOST',FAKENEWS_DATA_SERVER_HOST)
-console.log('FAKENEWS_DATA_SERVER_PORT',FAKENEWS_DATA_SERVER_PORT)
+console.log('FAKENEWS_DATA_SERVER_DMAINNAME',FAKENEWS_DATA_SERVER_DMAINNAME)
 console.log('NEO4J_HOST',NEO4J_HOST)
 
 
@@ -80,6 +79,7 @@ app.post('/valid-fakenews',async (req,res,next)=>{
       const session = driver.session();
       console.log('[req.body]',req.body);
       const {roomId,userId,text}=req.body;
+      let response
       const options = {
         method: 'POST',
         uri: `${FAKENEWS_DATA_SERVER_DMAINNAME}/isFakeNews`,
@@ -89,7 +89,12 @@ app.post('/valid-fakenews',async (req,res,next)=>{
         json: true // Automatically stringifies the body to JSON
       };
       console.log('[options]',options)
-      const response=await rp(options);
+      try {
+        response=await rp(options);
+      } catch (e) {
+        console.error('[request fake_news_store failed]',e.message)
+        throw e
+      }
       console.log('[response]',response)
       if(response.articleId===null && response.fakeNews===false){
         res.json({
