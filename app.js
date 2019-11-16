@@ -6,11 +6,22 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const rp = require('request-promise');
 
+const {
+  FAKENEWS_DATA_SERVER_HOST,
+  FAKENEWS_DATA_SERVER_PORT,
+  NEO4J_HOST,
+}=process.env
+
+console.log('FAKENEWS_DATA_SERVER_HOST',FAKENEWS_DATA_SERVER_HOST)
+console.log('FAKENEWS_DATA_SERVER_PORT',FAKENEWS_DATA_SERVER_PORT)
+console.log('NEO4J_HOST',NEO4J_HOST)
+
+
 const app = express();
 const neo4j = require('neo4j-driver').v1;
 
 const driver = neo4j.driver(
-  'bolt://localhost',
+  `bolt://${NEO4J_HOST}`,
   neo4j.auth.basic('neo4j', 'fakenews')
 );
 

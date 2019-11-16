@@ -1,0 +1,37 @@
+version: '3'
+services:
+  fake-news-api:
+    restart: always
+    depends_on:
+      - neo4j
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    image: fake-news-api
+    command: npm start
+    ports:
+      - "3000:3000"
+    environment:
+      - FAKENEWS_DATA_SERVER_HOST=http://localhost
+      - FAKENEWS_DATA_SERVER_PORT=3001
+      - NEO4J_HOST=neo4j_database
+    networks:
+      - neo4j_api
+
+  neo4j:
+    image: neo4j:latest
+    container_name: 'neo4j_database'
+    restart: always
+    environment:
+      - NEO4J_AUTH=neo4j/fakenews
+      - NEO4J_DIR=./neo4j_data
+    volumes:
+      - ./neo4j_data/db:/data/db
+    ports:
+      - 7474:7474
+      - 7687:7687
+    command: neo4j
+    networks:
+      - neo4j_api
+networks:
+  neo4j_api:
