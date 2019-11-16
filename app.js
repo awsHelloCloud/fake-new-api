@@ -7,11 +7,13 @@ const logger = require('morgan');
 const rp = require('request-promise');
 
 const {
-  FAKENEWS_DATA_SERVER_DMAINNAME,
+  FAKENEWS_DATA_SERVER_HOST,
+  FAKENEWS_DATA_SERVER_PORT,
   NEO4J_HOST,
 }=process.env
 
-console.log('FAKENEWS_DATA_SERVER_DMAINNAME',FAKENEWS_DATA_SERVER_DMAINNAME)
+console.log('FAKENEWS_DATA_SERVER_HOST',FAKENEWS_DATA_SERVER_HOST)
+console.log('FAKENEWS_DATA_SERVER_PORT',FAKENEWS_DATA_SERVER_PORT)
 console.log('NEO4J_HOST',NEO4J_HOST)
 
 
@@ -79,22 +81,16 @@ app.post('/valid-fakenews',async (req,res,next)=>{
       const session = driver.session();
       console.log('[req.body]',req.body);
       const {roomId,userId,text}=req.body;
-      let response
       const options = {
         method: 'POST',
-        uri: `${FAKENEWS_DATA_SERVER_DMAINNAME}/isFakeNews`,
+        uri: `${FAKENEWS_DATA_SERVER_HOST}:${FAKENEWS_DATA_SERVER_PORT}/isFakeNews`,
         formData: {
           text: text
         },
         json: true // Automatically stringifies the body to JSON
       };
       console.log('[options]',options)
-      try {
-        response=await rp(options);
-      } catch (e) {
-        console.error('[request fake_news_store failed]',e.message)
-        throw e
-      }
+      const response=await rp(options);
       console.log('[response]',response)
       if(response.articleId===null && response.fakeNews===false){
         res.json({
