@@ -7,8 +7,7 @@ const logger = require('morgan');
 const rp = require('request-promise');
 
 const {
-  FAKENEWS_DATA_SERVER_HOST,
-  FAKENEWS_DATA_SERVER_PORT,
+  FAKENEWS_DATA_SERVER_DMAINNAME,
   NEO4J_HOST,
 }=process.env
 
@@ -83,7 +82,7 @@ app.post('/valid-fakenews',async (req,res,next)=>{
       const {roomId,userId,text}=req.body;
       const options = {
         method: 'POST',
-        uri: `${FAKENEWS_DATA_SERVER_HOST}:${FAKENEWS_DATA_SERVER_PORT}/isFakeNews`,
+        uri: `${FAKENEWS_DATA_SERVER_DMAINNAME}/isFakeNews`,
         formData: {
           text: text
         },
