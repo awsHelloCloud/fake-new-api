@@ -1,6 +1,7 @@
 version: '3'
 services:
   fake-news-api:
+    container_name: 'fake-news-api'
     restart: always
     depends_on:
       - neo4j
