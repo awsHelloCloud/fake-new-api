@@ -59,7 +59,7 @@ app.use('/valid-fakenews',(req,res,next)=>{
 
 app.post('/isFakeNews',(req,res,next)=>{
   res.json({
-    articleId:'AWEMi_sOhutQxxU6tp-E'+`${new Date().getTime()}`,
+    articleId:'AWEMi_sOhutQxxU6tp-E',
     fakeNews:true
   })
 })
@@ -71,7 +71,7 @@ const findRumorSource=async(id)=>{
   <-[:SPREAD]-(r:Room)
   <-[:TALK_IN]-
   (user:LineUser)
-  RETURN r,user
+  RETURN user
   `)
   return userList;
 }
@@ -119,7 +119,7 @@ app.post('/valid-fakenews',async (req,res,next)=>{
           await session.run(`
           MATCH (${id}:Rumor {id:'${id}',text:'${text}'})
           CREATE 
-          (${userId}:LineUser {userId:'${userId}',name:'${new Date().getTime()}'})
+          (${userId}:LineUser {userId:'${userId}'})
           -[:TALK_IN]->
           (${roomId}:Room {roomId:'${roomId}'})
           -[:SPREAD]->
@@ -130,18 +130,19 @@ app.post('/valid-fakenews',async (req,res,next)=>{
           MATCH (${id}:Rumor {id:'${id}',text:'${text}'})
           MATCH (${roomId}:Room {roomId:'${roomId}'})
           CREATE 
-          (${userId}:LineUser {userId:'${userId}',name:'${new Date().getTime()}'})
+          (${userId}:LineUser {userId:'${userId}'})
           -[:TALK_IN]->
           (${roomId})
           -[:SPREAD]->
           (${id})
           `);
         }
+        session.close();
          const userList=await findRumorSource(id);
          const total=userList.records.length;
-         const source=userList.records[0]._fields[1].properties.userId;
-        res.json({is_fake:'YES',total,source}); 
-        session.close();
+         const lastIndex=userList.records.length-1;
+         const source=userList.records[lastIndex]._fields[0].properties.userId;
+        res.json({is_fake:'YES',source,userList}); 
       }else{
         res.json({is_fake:'UNKNOWN'})
       }

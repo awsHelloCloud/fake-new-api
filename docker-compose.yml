@@ -14,7 +14,7 @@ services:
       - "3000:3000"
     environment:
       - FAKENEWS_DATA_SERVER_HOST=http://localhost
-      - FAKENEWS_DATA_SERVER_PORT=3001
+      - FAKENEWS_DATA_SERVER_PORT=3000
       - NEO4J_HOST=neo4j_database
     networks:
       - neo4j_api

@@ -12,6 +12,7 @@
     "ejs": "~2.6.1",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
+    "lodash": "^4.17.15",
     "morgan": "~1.9.1",
     "neo4j-driver": "^1.7.6",
     "request": "^2.88.0",
